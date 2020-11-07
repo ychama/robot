@@ -9,12 +9,12 @@ public class Robot implements Runnable {
     int totalBatteryConsumption = 0;
     int timeWaiting = 0;
     int currentTime = 0;
-    ArrayList<Order> completedOrders;
+    ArrayList<Orderinfo> completedOrders;
 
     public Robot(int[] paths) {
         this.currBattery = 300;
         tablePaths = paths;
-        completedOrders = new ArrayList<Order>();
+        completedOrders = new ArrayList<Orderinfo>();
     }
 
     public void setKitchen(Kitchen k) {
@@ -31,10 +31,13 @@ public class Robot implements Runnable {
 
     public void startDelivering() throws InterruptedException {
         while (!kit.orderQueue.isEmpty()) {
-            Order candidateOrder = kit.orderQueue.poll(1, TimeUnit.SECONDS);
+            Order candidateOrder = kit.orderQueue.poll(100, TimeUnit.MILLISECONDS);
+
             if (candidateOrder == null)
                 break;
+
             PathInfo pathInfo = getTablePath(candidateOrder);
+            Thread.sleep(pathInfo.timeToDeliver);
             if (currBattery < pathInfo.timeToDeliver * 2) {
                 // charging up
                 currentTime += 60 * currBattery / 300.0;
@@ -44,7 +47,7 @@ public class Robot implements Runnable {
             currentTime += pathInfo.timeToDeliver * 2;
             currBattery -= pathInfo.timeToDeliver * 2;
             totalBatteryConsumption += pathInfo.timeToDeliver * 2;
-            completedOrders.add(candidateOrder);
+            completedOrders.add(new Orderinfo(candidateOrder, pathInfo));
         }
     }
 

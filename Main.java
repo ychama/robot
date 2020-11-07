@@ -49,9 +49,10 @@ public class Main {
         System.out.println("               Robot 1                ");
         System.out.println("-----------------------------------------");
         int i = 0;
-        for (Order o : r1.completedOrders) {
+        for (Orderinfo o : r1.completedOrders) {
             i++;
-            System.out.println("Order " + i + " is table number " + o.tableNumber);
+            System.out.println("Order " + i + " was delviered to table number " + o.o.tableNumber + " in "
+                    + o.pInfo.timeToDeliver * 2 + "sec");
             System.out.println();
         }
 
@@ -66,9 +67,10 @@ public class Main {
         System.out.println("-----------------------------------------");
 
         i = 0;
-        for (Order o : r2.completedOrders) {
+        for (Orderinfo o : r2.completedOrders) {
             i++;
-            System.out.println("Order " + i + " is table number " + o.tableNumber);
+            System.out.println("Order " + i + " was delviered to table number " + o.o.tableNumber + " in "
+                    + o.pInfo.timeToDeliver * 2 + "sec");
             System.out.println();
         }
 
@@ -101,7 +103,7 @@ public class Main {
         int[][] shortestPaths = new int[8][8];
         for (int i = 0; i < 8; i++) {
             for (int j = 0; j < 8; j++) {
-                shortestPaths[i][j] = Integer.MAX_VALUE;
+                shortestPaths[i][j] = 100000;
             }
         }
         shortestPaths[0][0] = 0;
@@ -203,5 +205,6 @@ public class Main {
         kitchen = new Kitchen(cusOrders);
 
         scan.close();
+
     }
 }
